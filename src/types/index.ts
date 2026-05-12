@@ -21,13 +21,15 @@ export interface IProduct {
 }
 
 export interface IBuyer {
-  payment: TPayment;
+  payment: TPayment | null;
   email: string;
   phone: string;
   address: string;
 }
 
 export type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
+
+
 
 // Серверные типы
 
@@ -37,15 +39,8 @@ export interface IProductListResponse {
   items: IProduct[];
 }
 
-/** Способ оплаты в формате сервера */
-export type TServerPayment = "online" | "cash";
-
 /** Тело запроса POST /order — отличается от IBuyer полем payment: здесь используется TServerPayment */
-export interface IOrderRequest {
-  payment: TServerPayment;
-  email: string;
-  phone: string;
-  address: string;
+export interface IOrderRequest extends IBuyer {
   total: number;
   items: string[]; // массив id выбранных товаров
 }

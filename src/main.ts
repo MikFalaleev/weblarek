@@ -90,8 +90,9 @@ const webLarekApi = new WebLarekApi(baseApi);
 
 webLarekApi
   .getProducts()
-  .then((items) => {
-    catalog.setItems(items);
+  .then((data) => {
+    catalog.setItems(data.items);
+    console.log("Всего товаров на сервере:", data.total);
     console.log("Каталог с сервера. getItems():", catalog.getItems());
   })
   .catch((err) => {
