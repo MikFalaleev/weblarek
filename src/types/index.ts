@@ -29,9 +29,7 @@ export interface IBuyer {
 
 export type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
 
-
-
-// Серверные типы
+// ─── Серверные типы ───────────────────────────────────────────────────────────
 
 /** Ответ сервера на GET /product/ */
 export interface IProductListResponse {
@@ -39,14 +37,25 @@ export interface IProductListResponse {
   items: IProduct[];
 }
 
-/** Тело запроса POST /order — отличается от IBuyer полем payment: здесь используется TServerPayment */
-export interface IOrderRequest extends IBuyer {
+/**
+ * Способ оплаты в формате сервера.
+ * Сервер принимает "online" (не "card") для онлайн-оплаты.
+ */
+export type TServerPayment = "online" | "cash";
+
+/**
+ * Тело запроса POST /order.
+ * Переиспользует поля IBuyer через Omit, переопределяя только payment
+ * на серверный формат TServerPayment.
+ */
+export interface IOrderRequest extends Omit<IBuyer, "payment"> {
+  payment: TServerPayment;
   total: number;
-  items: string[]; // массив id выбранных товаров
+  items: string[];
 }
 
 /** Ответ сервера на POST /order — подтверждение покупки */
 export interface IOrderResponse {
-  id: string; // идентификатор созданного заказа
-  total: number; // сумма, списанная с покупателя
+  id: string;
+  total: number;
 }
