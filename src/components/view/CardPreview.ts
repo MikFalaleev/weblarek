@@ -4,7 +4,8 @@ import { categoryMap } from '../../utils/constants';
 
 export type TCardPreviewData = TCardData &
   Pick<IProduct, 'category' | 'image' | 'description'> & {
-    inBasket: boolean;
+    buttonText: string;
+    buttonDisabled: boolean;
   };
 
 export class CardPreview extends Card<TCardPreviewData> {
@@ -37,14 +38,11 @@ export class CardPreview extends Card<TCardPreviewData> {
     this.descriptionElement.textContent = value;
   }
 
-  set price(value: number | null) {
-    this.priceElement.textContent =
-      value === null ? 'Бесценно' : `${value} синапсов`;
-    this.button.disabled = value === null;
-    if (value === null) this.button.textContent = 'Недоступно';
+  set buttonText(value: string) {
+    this.button.textContent = value;
   }
 
-  set inBasket(value: boolean) {
-    this.button.textContent = value ? 'Удалить из корзины' : 'В корзину';
+  set buttonDisabled(value: boolean) {
+    this.button.disabled = value;
   }
 }

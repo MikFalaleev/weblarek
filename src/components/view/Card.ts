@@ -1,9 +1,10 @@
 import { Component } from '../base/Component';
-import { IProduct } from '../../types/index';
 
-export type TCardData = Pick<IProduct, 'id' | 'title' | 'price'>;
+export interface TCardData {
+  title: string;
+  price: string;
+}
 
-// Card — обобщённый базовый класс, T должен включать TCardData
 export class Card<T extends TCardData> extends Component<T> {
   protected titleElement: HTMLElement;
   protected priceElement: HTMLElement;
@@ -18,8 +19,7 @@ export class Card<T extends TCardData> extends Component<T> {
     this.titleElement.textContent = value;
   }
 
-  set price(value: number | null) {
-    this.priceElement.textContent =
-      value === null ? 'Бесценно' : `${value} синапсов`;
+  set price(value: string) {
+    this.priceElement.textContent = value;
   }
 }

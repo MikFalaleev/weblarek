@@ -9,8 +9,6 @@ export interface IApi {
   ): Promise<T>;
 }
 
-export type TPayment = "card" | "cash";
-
 export interface IProduct {
   id: string;
   description: string;
@@ -20,8 +18,11 @@ export interface IProduct {
   price: number | null;
 }
 
+/** Способ оплаты — значения совпадают с форматом сервера */
+export type TServerPayment = "online" | "cash";
+
 export interface IBuyer {
-  payment: TPayment | null;
+  payment: TServerPayment | null;
   email: string;
   phone: string;
   address: string;
@@ -31,30 +32,17 @@ export type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
 
 // ─── Серверные типы ───────────────────────────────────────────────────────────
 
-/** Ответ сервера на GET /product/ */
 export interface IProductListResponse {
   total: number;
   items: IProduct[];
 }
 
-/**
- * Способ оплаты в формате сервера.
- * Сервер принимает "online" (не "card") для онлайн-оплаты.
- */
-export type TServerPayment = "online" | "cash";
-
-/**
- * Тело запроса POST /order.
- * Переиспользует поля IBuyer через Omit, переопределяя только payment
- * на серверный формат TServerPayment.
- */
-export interface IOrderRequest extends Omit<IBuyer, "payment"> {
+export interface IOrderRequest extends IBuyer {
   payment: TServerPayment;
   total: number;
   items: string[];
 }
 
-/** Ответ сервера на POST /order — подтверждение покупки */
 export interface IOrderResponse {
   id: string;
   total: number;

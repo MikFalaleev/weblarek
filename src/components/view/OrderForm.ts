@@ -1,25 +1,25 @@
 import { Form, IFormState } from './Form';
 import { IEvents } from '../base/Events';
-import { TPayment } from '../../types/index';
+import { TServerPayment } from '../../types/index';
 
 export interface IOrderFormData extends IFormState {
-  payment: TPayment | null;
+  payment: TServerPayment | null;
   address: string;
 }
 
 export class OrderForm extends Form<IOrderFormData> {
-  protected cardButton: HTMLButtonElement;
+  protected onlineButton: HTMLButtonElement;
   protected cashButton: HTMLButtonElement;
   protected addressInput: HTMLInputElement;
 
   constructor(container: HTMLFormElement, events: IEvents) {
     super(container, events);
-    this.cardButton = container.querySelector('[name=card]')!;
+    this.onlineButton = container.querySelector('[name=card]')!;
     this.cashButton = container.querySelector('[name=cash]')!;
     this.addressInput = container.querySelector('[name=address]')!;
 
-    this.cardButton.addEventListener('click', () => {
-      this.events.emit('order:change', { field: 'payment', value: 'card' });
+    this.onlineButton.addEventListener('click', () => {
+      this.events.emit('order:change', { field: 'payment', value: 'online' });
     });
 
     this.cashButton.addEventListener('click', () => {
@@ -27,8 +27,8 @@ export class OrderForm extends Form<IOrderFormData> {
     });
   }
 
-  set payment(value: TPayment | null) {
-    this.cardButton.classList.toggle('button_alt-active', value === 'card');
+  set payment(value: TServerPayment | null) {
+    this.onlineButton.classList.toggle('button_alt-active', value === 'online');
     this.cashButton.classList.toggle('button_alt-active', value === 'cash');
   }
 

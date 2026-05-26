@@ -2,8 +2,7 @@ import { Card, TCardData } from './Card';
 import { IProduct } from '../../types/index';
 import { categoryMap } from '../../utils/constants';
 
-export type TCardCatalogData = TCardData &
-  Pick<IProduct, 'category' | 'image'>;
+export type TCardCatalogData = TCardData & Pick<IProduct, 'category' | 'image'>;
 
 export class CardCatalog extends Card<TCardCatalogData> {
   protected categoryElement: HTMLElement;

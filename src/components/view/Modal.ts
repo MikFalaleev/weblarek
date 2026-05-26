@@ -1,5 +1,4 @@
 import { Component } from '../base/Component';
-import { IEvents } from '../base/Events';
 
 interface IModalData {
   content: HTMLElement;
@@ -8,11 +7,13 @@ interface IModalData {
 export class Modal extends Component<IModalData> {
   protected closeButton: HTMLButtonElement;
   protected contentElement: HTMLElement;
+  protected pageWrapper: HTMLElement | null;
 
-  constructor(container: HTMLElement, private events: IEvents) {
+  constructor(container: HTMLElement) {
     super(container);
     this.closeButton = container.querySelector('.modal__close')!;
     this.contentElement = container.querySelector('.modal__content')!;
+    this.pageWrapper = document.querySelector('.page__wrapper');
 
     this.closeButton.addEventListener('click', () => this.close());
     container.addEventListener('click', (e) => {
@@ -26,13 +27,13 @@ export class Modal extends Component<IModalData> {
 
   open() {
     this.container.classList.add('modal_active');
-    this.events.emit('modal:open');
+    this.pageWrapper?.classList.add('page__wrapper_locked');
   }
 
   close() {
     this.container.classList.remove('modal_active');
     this.contentElement.innerHTML = '';
-    this.events.emit('modal:close');
+    this.pageWrapper?.classList.remove('page__wrapper_locked');
   }
 
   render(data: IModalData): HTMLElement {

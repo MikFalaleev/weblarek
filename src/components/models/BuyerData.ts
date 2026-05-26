@@ -1,8 +1,8 @@
-import { IBuyer, TPayment, TBuyerErrors } from "../../types/index";
+import { IBuyer, TServerPayment, TBuyerErrors } from "../../types/index";
 import { IEvents } from "../base/Events";
 
 export class BuyerData {
-  private payment: TPayment | null = null;
+  private payment: TServerPayment | null = null;
   private address: string = "";
   private phone: string = "";
   private email: string = "";
@@ -14,7 +14,7 @@ export class BuyerData {
 
   setField(field: keyof IBuyer, value: string): void {
     if (field === "payment") {
-      this.payment = value as TPayment;
+      this.payment = value as TServerPayment;
     } else if (field === "address") {
       this.address = value;
     } else if (field === "phone") {
@@ -22,7 +22,7 @@ export class BuyerData {
     } else if (field === "email") {
       this.email = value;
     }
-    this.events.emit("buyer:changed", this.getData());
+    this.events.emit("buyer:changed");
   }
 
   getData(): IBuyer {
@@ -39,17 +39,15 @@ export class BuyerData {
     this.address = "";
     this.phone = "";
     this.email = "";
-    this.events.emit("buyer:changed", this.getData());
+    this.events.emit("buyer:changed");
   }
 
   validate(): TBuyerErrors {
     const errors: TBuyerErrors = {};
-
     if (!this.payment) errors.payment = "Не выбран вид оплаты";
     if (!this.address.trim()) errors.address = "Укажите адрес доставки";
     if (!this.phone.trim()) errors.phone = "Укажите номер телефона";
     if (!this.email.trim()) errors.email = "Укажите email";
-
     return errors;
   }
 }

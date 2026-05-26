@@ -4,6 +4,7 @@ import { IEvents } from '../base/Events';
 interface IBasketViewData {
   items: HTMLElement[];
   total: number;
+  orderButtonDisabled: boolean;
 }
 
 export class BasketView extends Component<IBasketViewData> {
@@ -23,16 +24,14 @@ export class BasketView extends Component<IBasketViewData> {
   }
 
   set items(value: HTMLElement[]) {
-    if (value.length === 0) {
-      this.listElement.innerHTML = '<p class="basket__empty">Корзина пуста</p>';
-      this.orderButton.disabled = true;
-    } else {
-      this.listElement.replaceChildren(...value);
-      this.orderButton.disabled = false;
-    }
+    this.listElement.replaceChildren(...value);
   }
 
   set total(value: number) {
     this.totalElement.textContent = `${value} синапсов`;
+  }
+
+  set orderButtonDisabled(value: boolean) {
+    this.orderButton.disabled = value;
   }
 }
